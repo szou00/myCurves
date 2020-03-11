@@ -64,7 +64,8 @@ struct matrix * generate_curve_coefs( double p0, double p1,
                                       double p2, double p3, int type) {
   struct matrix *coefs = new_matrix(4, 1);
   struct matrix *tmp = new_matrix(4, 3);
-  add_point(coefs, p0, p1, p2, p3);
+  add_point(coefs, p0, p1, p2);
+  coefs-> m[3][0] = p3;
   if (type == 0) {
     tmp = make_hermite();
   }

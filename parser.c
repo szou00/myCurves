@@ -85,6 +85,7 @@ void parse_file ( char * filename,
     double xvals[3];
     double yvals[3];
     double zvals[4];
+    double r[4];
     struct matrix *tmp;
     double theta;
     char axis;
@@ -169,5 +170,21 @@ void parse_file ( char * filename,
       draw_lines(edges, s, c);
       save_extension(s, line);
     }//end save
+
+    else if (strcmp(line, "circle") == 0) {
+      fgets(line, sizeof(line), f);
+      //printf("MOVE\t%s", line);
+      sscanf(line, "%lf %lf %lf lf",
+             xvals, yvals, zvals, r);
+      add_circle(edges, xvals, yvals, zvals, r, 0.001);
+    }
+
+    else if (strcmp(line, "bezier") == 0) {
+      fgets(line, sizeof(line), f);
+      //printf("MOVE\t%s", line);
+      sscanf(line, "%lf %lf %lf %lf",
+             xvals, yvals, zvals, r);
+      add_circle(edges, xvals, yvals, zvals, r, 0.001);
+    }
   }
 }

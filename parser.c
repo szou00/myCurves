@@ -197,8 +197,10 @@ void parse_file ( char * filename,
       //printf("name: %s\n", line);
       clear_screen(s);
       draw_lines(edges, s, c);
-      // display(s);
+      display(s);
       save_extension(s, line);
+      save_ppm(s, "binary.ppm");
+      save_ppm_ascii(s, "ascii.ppm");
     }//end save
   }
 }

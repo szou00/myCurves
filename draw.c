@@ -72,9 +72,6 @@ void add_curve( struct matrix *edges,
    double y = 0;
    while (t <= 1+step) {
      // printf("in\n");
-     // x = xc->m[3][0] + (t * (xc->m[2][0] + (t * (xc->m[1][0] + (t * xc->m[0][0])))));
-     // y = yc->m[3][0] + t * (yc->m[2][0] + t * (yc->m[1][0] + t * yc->m[0][0]));
-
      x = xc->m[3][0] + (t * (xc->m[2][0] + (t * (xc->m[1][0] + (t * xc->m[0][0])))));
      y = yc->m[3][0] + t * (yc->m[2][0] + t * (yc->m[1][0] + t * yc->m[0][0]));
 

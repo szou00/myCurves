@@ -82,10 +82,10 @@ void parse_file ( char * filename,
     line[strlen(line)-1]='\0';
     //printf(":%s:\n",line);
 
-    double xvals[3];
-    double yvals[3];
+    double xvals[4];
+    double yvals[4];
     double zvals[4];
-    double r[4];
+    double r = 0.0;
     struct matrix *tmp;
     double theta;
     char axis;
@@ -154,12 +154,41 @@ void parse_file ( char * filename,
       matrix_mult(transform, edges);
     }//end apply
 
+    else if ( strncmp(line, "circle", strlen(line)) == 0 ) {
+      fgets(line, sizeof(line), f);
+
+      sscanf(line, "%lf %lf %lf %lf",
+             xvals, yvals, zvals, &r);
+      // printf("%lf %lf %lf %lf\n", xvals[0], yvals[0], zvals[0],r);
+      add_circle(edges, xvals[0], yvals[0], zvals[0],r, .01);
+    }
+
+    else if ( strncmp(line, "hermite", strlen(line)) == 0 ) {
+      fgets(line, sizeof(line), f);
+
+      sscanf(line, "%lf %lf %lf %lf %lf %lf %lf %lf",
+             xvals, yvals, xvals+1,yvals+1,xvals+2,yvals+2,xvals+3,yvals+3);
+      // printf("%lf %lf %lf %lf\n", xvals[0], yvals[0], zvals[0],r);
+      add_curve(edges, xvals[0], yvals[0], xvals[1],yvals[1],xvals[2],yvals[2],xvals[3],yvals[3],.01, HERMITE);
+
+    }
+
+    else if ( strncmp(line, "bezier", strlen(line)) == 0 ) {
+      fgets(line, sizeof(line), f);
+
+      sscanf(line, "%lf %lf %lf %lf %lf %lf %lf %lf",
+             xvals, yvals, xvals+1,yvals+1,xvals+2,yvals+2,xvals+3,yvals+3);
+      // printf("%lf %lf %lf %lf\n", xvals[0], yvals[0], zvals[0],r);
+      add_curve(edges, xvals[0], yvals[0], xvals[1],yvals[1],xvals[2],yvals[2],xvals[3],yvals[3],.01, BEZIER);
+    }
+
     else if ( strncmp(line, "display", strlen(line)) == 0 ) {
       //printf("DISPLAY\t%s", line);
       clear_screen(s);
       draw_lines(edges, s, c);
-      display( s );
+      display(s);
     }//end display
+
 
     else if ( strncmp(line, "save", strlen(line)) == 0 ) {
       //printf("SAVE\t%s", line);
@@ -168,23 +197,8 @@ void parse_file ( char * filename,
       //printf("name: %s\n", line);
       clear_screen(s);
       draw_lines(edges, s, c);
+      // display(s);
       save_extension(s, line);
     }//end save
-
-    else if (strcmp(line, "circle") == 0) {
-      fgets(line, sizeof(line), f);
-      //printf("MOVE\t%s", line);
-      sscanf(line, "%lf %lf %lf lf",
-             xvals, yvals, zvals, r);
-      add_circle(edges, xvals, yvals, zvals, r, 0.001);
-    }
-
-    else if (strcmp(line, "bezier") == 0) {
-      fgets(line, sizeof(line), f);
-      //printf("MOVE\t%s", line);
-      sscanf(line, "%lf %lf %lf %lf",
-             xvals, yvals, zvals, r);
-      add_circle(edges, xvals, yvals, zvals, r, 0.001);
-    }
   }
 }

@@ -18,32 +18,72 @@
   Returns: The correct 4x4 matrix that can be used
   to generate the coefficients for a bezier curve
   ====================*/
-struct matrix * make_bezier() {
-  struct matrix *tmp = new_matrix(4, 3);
-  add_point(tmp, -1, 3, -3);
-  add_point(tmp, 3, -6, 3);
-  add_point(tmp, -3, 3, 0);
-  add_point(tmp, 1, 0, 0);
-  tmp->m[3][1] = 0;
-  tmp->m[3][2] = 0;
-  tmp->m[3][3] = 0;
-  return tmp;
-}
+  struct matrix * make_bezier() {
+    struct matrix *tmp = new_matrix(4, 4);
+    // tmp->m[0][0] = -1;
+    // tmp->m[0][1] = 3;
+    // tmp->m[0][2] = -3;
+    // tmp->m[0][3] = 1;
+    //
+    // tmp->m[1][0] = 3;
+    // tmp->m[1][1] = -6;
+    // tmp->m[1][2] = 3;
+    // tmp->m[1][3] = 0;
+    //
+    // tmp->m[2][0] = -3;
+    // tmp->m[2][1] = 3;
+    // tmp->m[2][2] = 0;
+    // tmp->m[2][3] = 0;
+    //
+    // tmp->m[3][0] = 1;
+    // tmp->m[3][1] = 0;
+    // tmp->m[3][2] = 0;
+    // tmp->m[3][3] = 0;
+    add_point(tmp, -1, 3, -3);
+    add_point(tmp, 3, -6, 3);
+    add_point(tmp, -3, 3, 0);
+    add_point(tmp, 1, 0, 0);
+    tmp->m[3][1] = 0;
+    tmp->m[3][2] = 0;
+    tmp->m[3][3] = 0;
+    return tmp;
+  }
 
-/*======== struct matrix * make_hermite() ==========
-  Returns: The correct 4x4 matrix that can be used
-  to generae the coefiecients for a hermite curve
-  ====================*/
-struct matrix * make_hermite() {
-  struct matrix *tmp = new_matrix(4, 3);
-  add_point(tmp, 0, 1, 9);
-  add_point(tmp, 0, 1, 9);
-  add_point(tmp, 0, 1, 1);
-  add_point(tmp, 1, 1, 9);
-  tmp->m[3][0] = 3;
-  tmp->m[3][1] = 2;
-  tmp->m[3][2] = 1;
-  tmp->m[3][3] = 9;
+  /*======== struct matrix * make_hermite() ==========
+    Returns: The correct 4x4 matrix that can be used
+    to generae the coefiecients for a hermite curve
+    ====================*/
+  struct matrix * make_hermite() {
+    struct matrix *tmp = new_matrix(4, 4);
+    tmp->m[0][0] = 2;
+    tmp->m[0][1] = -2;
+    tmp->m[0][2] = 1;
+    tmp->m[0][3] = 1;
+
+    tmp->m[1][0] = -3;
+    tmp->m[1][1] = 3;
+    tmp->m[1][2] = -2;
+    tmp->m[1][3] = -1;
+
+    tmp->m[2][0] = 0;
+    tmp->m[2][1] = 0;
+    tmp->m[2][2] = 1;
+    tmp->m[2][3] = 0;
+
+    tmp->m[3][0] = 1;
+    tmp->m[3][1] = 0;
+    tmp->m[3][2] = 0;
+    tmp->m[3][3] = 0;
+  // add_point(tmp, 2, -2, 1);
+  // add_point(tmp, -3, 3, -2);
+  // add_point(tmp, 0, 0, 1);
+  // add_point(tmp, 1, 0, 0);
+  // tmp->m[3][0] = 1;
+  // tmp->m[3][1] = -1;
+  // tmp->m[3][2] = 0;
+  // tmp->m[3][3] = 0;
+  // print_matrix(tmp);
+  // printf("\n");
   return tmp;
 }
 
@@ -72,7 +112,13 @@ struct matrix * generate_curve_coefs( double p0, double p1,
   else {
     tmp = make_bezier();
   }
+  // printf("\nmatrix:\n");
+  // print_matrix(tmp);
+  // printf("\ncoef:\n");
+  // print_matrix(coefs);
   matrix_mult(tmp, coefs);
+  // printf("\nresult:\n");
+  // print_matrix(coefs);
   return coefs;
 }
 

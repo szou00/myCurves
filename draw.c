@@ -20,12 +20,15 @@
   void add_circle( struct matrix *edges,
                  double cx, double cy, double cz,
                  double r, double step ) {
-    int x0 = cx, y0 = cy, t = 0, x1, y1;
-    while (t <= 1) {
+    double x0 = r+cx;
+    double y0 = cy;
+    double t = 0;
+    double x1, y1;
+    while (t <= step+1) {
       x1 = r * cos(2* M_PI * t) + cx;
       y1 = r * sin(2* M_PI * t) + cy;
 
-      add_edge(edges, x1, y1, cz, x1, y1, cz);
+      add_edge(edges, x0, y0, cz, x1, y1, cz);
       x0 = x1;
       y0 = y1;
       t+=step;
@@ -57,15 +60,27 @@ void add_curve( struct matrix *edges,
                 double x3, double y3,
                 double step, int type ) {
    struct matrix * xc = generate_curve_coefs(x0, x1, x2, x3, type);
+   // printf("\nx matrix:\n");
+   // print_matrix(xc);
    struct matrix * yc = generate_curve_coefs(y0, y1, y2, y3, type);
-   int t = 0;
-   while (t <= 1) {
-     x1 = t * (t * (xc->m[0][0] * t + xc -> m[1][0]) + xc->m[2][0]) + xc->m[3][0];
-     y1 = t * (t * (yc->m[0][0] * t + yc -> m[1][0]) + yc->m[2][0]) + yc->m[3][0];
+   // printf("\ny matrix:\n");
+   // print_matrix(yc);
+   double t = 0;
+   double currentx = x0;
+   double currenty = y0;
+   double x = 0;
+   double y = 0;
+   while (t <= 1+step) {
+     // printf("in\n");
+     // x = xc->m[3][0] + (t * (xc->m[2][0] + (t * (xc->m[1][0] + (t * xc->m[0][0])))));
+     // y = yc->m[3][0] + t * (yc->m[2][0] + t * (yc->m[1][0] + t * yc->m[0][0]));
 
-     add_edge(edges, x0, y0, 0, x1, y1, 0);
-     x0 = x1;
-     y0 = y1;
+     x = xc->m[3][0] + (t * (xc->m[2][0] + (t * (xc->m[1][0] + (t * xc->m[0][0])))));
+     y = yc->m[3][0] + t * (yc->m[2][0] + t * (yc->m[1][0] + t * yc->m[0][0]));
+
+     add_edge(edges, currentx, currenty, 0, x, y, 0);
+     currentx = x;
+     currenty = y;
      t+=step;
    }
 }
